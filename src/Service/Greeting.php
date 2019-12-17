@@ -13,14 +13,20 @@ class Greeting
      */
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @var string
+     */
+    private $message;
+
+    public function __construct(LoggerInterface $logger, string $message)
     {
         $this->logger = $logger;
+        $this->message = $message;
     }
 
     public function greet(string $name)
     {
         $this->logger->info("Greeted $name");
-        return "Hello $name";
+        return "{$this->message} $name";
     }
 }
