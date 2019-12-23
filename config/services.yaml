@@ -29,6 +29,11 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    #Recuperer les variables globales dans l'extension créée à la main
+    App\Twig\AppExtension:
+        arguments:
+            $locale: '%locale%'
+
     #    App\Service\Greeting:
     #        arguments:
     #            $message: '%hello_m%'

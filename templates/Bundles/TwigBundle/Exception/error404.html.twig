@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{# Creer des exceptions personnalisées #}
+
+ {% block body %}
+  <h2>Very bad thing happened !</h2>
+  {{ status_text }} {{ status_code }}
+ {% endblock %}

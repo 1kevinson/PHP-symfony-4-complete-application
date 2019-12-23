@@ -2,3 +2,7 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+
+    #Definir ici des variables globales aux quelles on aura accès dans tous les templates
+    globals:
+        message: '%hello_m%'

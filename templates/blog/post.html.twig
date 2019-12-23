@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Post Index{% endblock %}
+
+{% block body %}
+    <p>ID {{ id }}</p>
+    <h3>{{ post.title | upper }}</h3>
+    <p>{{ post.text }}</p>
+    <p>{{ post.date | date('H:i:s')}}</p>
+    <p>Amount : {{ 50000 | price }}</p>
+    <p> there is local : {{ locale }}</p>
+
+{% endblock %}
