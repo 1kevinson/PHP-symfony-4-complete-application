@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="media text-muted pt-3">
+    <img data-src="holder.js/32x32?text=MJ&bg=e83e8c&fg=fff&size=8" alt="holder {{ post.id }}" class="mr-2 rounded">
+    <p class="media-body pb-3 mb-0">
+        <span class="d-block"><strong class="text-gray-dark">@TesterUser</strong> <small>{{post.time | date('H:i:s')}}</small></span>
+        {{post.text}}
+    </p>
+</div>
+{% endblock %}

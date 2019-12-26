@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MicroPostRepository")
@@ -19,6 +20,8 @@ class MicroPost
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     * @Assert\Length(min=10)
      */
     private $text;
 
@@ -84,7 +87,8 @@ class MicroPost
     /* Comment section
 
         - Don't forget to use annotation @ORM\Table which is necessary to create table with command doctrine:migration
-
+        - Don't forget name space for validators constraints
+        - @Assert\Length(min=10,minMessage="Custom error message")
     */
 }
 
