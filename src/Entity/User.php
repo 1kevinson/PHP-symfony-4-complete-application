@@ -151,8 +151,9 @@ class User implements UserInterface, \Serializable
        ]);
     }
 
-    public function unserialize($serialized)
+   public function unserialize($serialized)
     {
-        list($this->id, $this->username, $this->password) = $this->unserialize($serialized);
+        list($this->id, $this->username, $this->password) = unserialize($serialized);
     }
+
 }

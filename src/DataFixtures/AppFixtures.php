@@ -45,17 +45,12 @@ class AppFixtures extends Fixture
 
     public function loadUsers(ObjectManager $manager)
     {
-        $random_a = rand(0,15) + 1;
-
-        for($i=0; $i < 5 ; $i++)
-        {
-            $user = new User();
-            $user->setEmail("user_email_me".$i.$random_a."@yahoo.fr");
-            $user->setUsername("user_is_".$i.$random_a);
-            $user->setFullname('The User Test');
-            $user->setPassword($this->passwordEncoder->encodePassword($user,'admin'));
-            $manager->persist($user);
-        }
+        $user = new User();
+        $user->setEmail("user_01@yahoo.fr");
+        $user->setUsername("arsene");
+        $user->setFullname('The User Arsene');
+        $user->setPassword($this->passwordEncoder->encodePassword($user,'admin'));
+        $manager->persist($user);
 
         $manager->flush();
     }
