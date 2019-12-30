@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
     {% if error %}
         <div class="alert alert-danger">
             {{ error.messageKey|trans(error.messageData, 'security') }}
@@ -25,4 +26,5 @@
             <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}">
         </div>
     </form>
+    </div>
 {% endblock %}
