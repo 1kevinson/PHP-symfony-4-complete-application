@@ -11,8 +11,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
-
-
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -26,8 +24,8 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $this->loadMicroPosts($manager);
         $this->loadUsers($manager);
+        $this->loadMicroPosts($manager);
     }
 
     public function loadMicroPosts(ObjectManager $manager)
@@ -37,6 +35,9 @@ class AppFixtures extends Fixture
             $micro_post = new MicroPost();
             $micro_post->setText("Fixture text numero : ". rand(0,500));
             $micro_post->setTime( new \DateTime('2017-03-15 15:00:36'));
+
+            $micro_post->setUser($this->getReference('user_01'));
+
             $manager->persist($micro_post);
         }
 
@@ -50,8 +51,10 @@ class AppFixtures extends Fixture
         $user->setUsername("arsene");
         $user->setFullname('The User Arsene');
         $user->setPassword($this->passwordEncoder->encodePassword($user,'admin'));
-        $manager->persist($user);
 
+        $this->addReference('user_01',$user);
+
+        $manager->persist($user);
         $manager->flush();
     }
 }
