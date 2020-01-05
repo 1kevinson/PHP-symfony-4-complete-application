@@ -30,9 +30,10 @@ class MicroPost
      */
     private $time;
 
+    /* Jointure ManyToOne - Cardinalité multiple qui a le inversedBy (nom de la propriété dans l'entité jointe)  */
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
-     * @ORM\JoinColumn()
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 

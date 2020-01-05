@@ -45,12 +45,7 @@ class BlogController extends  AbstractController
      */
     public function index()
     {
-        $html =  $this->render(
-            'blog/index.html.twig',
-            [
-                'posts' => $this->session->get('posts')
-            ]
-          );
+        $html =  $this->render('blog/index.html.twig',['posts' => $this->session->get('posts')]);
 
         return $html;
     }

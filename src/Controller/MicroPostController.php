@@ -9,11 +9,13 @@ use App\Forms\MicroPostType;
 use App\Repository\MicroPostRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @Route("/micro-post")
@@ -30,28 +32,50 @@ class MicroPostController extends AbstractController
 
     private $flashBag;
 
+    private $authorizationChecker;
 
-    public function __construct( MicroPostRepository $microPostRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, FlashBagInterface $flashBag)
+
+    public function __construct( MicroPostRepository $microPostRepository,
+                                 FormFactoryInterface $formFactory,
+                                 EntityManagerInterface $entityManager,
+                                 FlashBagInterface $flashBag,
+                                 AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->microPostRepository = $microPostRepository;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
         $this->flashBag = $flashBag;
+        $this->authorizationChecker = $authorizationChecker;
     }
+
 
     /**
      * @Route("/",name="micro_post_index")
      */
     public function index()
     {
-        return $this->render('micro-post/index.html.twig', ['posts' => $this->microPostRepository->findAll()]);
+        return $this->render('micro-post/index.html.twig',[
+                'posts' => $this->microPostRepository->findBy([],[
+                        'id' => 'DESC'
+                    ]
+                )]
+        );
     }
 
     /**
      * @Route("/edit/{id}",name="micro_post_edit")
+     * @Security("is_granted('edit', post)", message="Access Denied for Editing")
      */
     public function edit(MicroPost $post, Request $request)
     {
+        /*
+         * other option for security annotation
+         *
+         * if(!$this->authorizationChecker->isGranted('edit', $post))
+        {
+            throw new UnauthorizedHttpException();
+        }*/
+
         $form = $this->formFactory->create(MicroPostType::class, $post );
         $form->handleRequest($request);
 
@@ -67,26 +91,33 @@ class MicroPostController extends AbstractController
         ]);
     }
 
+
     /**
      * @Route("/delete/{id}",name="micro_post_delete")
+     * @Security("is_granted('delete', post)", message="Access Denied for Deleting")
      */
     public function delete(MicroPost $post)
     {
+        $postId = $post->getId();
         $this->entityManager->remove($post);
         $this->entityManager->flush();
 
-        $this->flashBag->add('notice', 'Micropost '. $post->getId() .' was deleted !');
+        $this->flashBag->add('notice', 'Micropost '. $postId .' was deleted !');
 
         return $this->redirectToRoute('micro_post_index');
     }
 
+
     /**
      * @Route("/add",name="micro_post_add")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function add( Request $request)
     {
+        $authUser = $this->getUser();
         $microPost = new MicroPost();
         $microPost->setTime( new DateTime());
+        $microPost->setUser($authUser);
 
         $form = $this->formFactory->create(MicroPostType::class, $microPost );
         $form->handleRequest($request);
@@ -103,6 +134,7 @@ class MicroPostController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
 
     /**
      * @Route("/{id}",name="micro_post_fetch")
@@ -122,5 +154,7 @@ class MicroPostController extends AbstractController
       - Important to create form HandleRequest before the createView
       - EntityManager Import from Interface
       - Flash Message store inside the session
+
+      - this->getUser() ; super method allow to retrieve authenticated user
     */
 }

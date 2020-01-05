@@ -1,4 +1,6 @@
 security:
+    access_decision_manager:
+        strategy: affirmative  #Strategy defined for voter, use to granted User access for certains actions
     encoders:
         App\Entity\User: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
@@ -43,3 +45,8 @@ security:
     access_control:
         # - { path: ^/micro-post, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
+
+
+    # Define the role hierarchy setting to display datas allowed for ROLE_USER to ROLE_ADMIN
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER

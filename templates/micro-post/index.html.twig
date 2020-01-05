@@ -1,16 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container-fluid">
     {% for message in app.flashes('notice') %}
         <div class="alert alert-success">
             {{ message }}
         </div>
     {% endfor %}
-
-    <p class="d-block text-right">
-        <a href="{{ path('micro_post_add') }}" class="badge badge-primary">add new</a>
-        <a href="{{ path('security_logout') }}" class="badge badge-secondary">logout</a>
-    </p>
 
     <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
 
@@ -19,8 +15,15 @@
           {{  include('micro-post/post.html.twig', {'post' : post })  }}
         </a>
         <p class="d-block text-right">
-           <a href="{{ path('micro_post_edit', {'id': post.id }) }}" class="badge badge-pill badge-light">Edit post : {{ post.id }}</a>
-           <a href="{{ path('micro_post_delete', {'id': post.id }) }}" class="badge badge-pill badge-info">Remove post : {{ post.id }}</a>
+            {% if is_granted('edit', post) %}
+               <a href="{{ path('micro_post_edit', {'id': post.id }) }}" class="badge badge-pill badge-light">Edit post : {{ post.id }}</a>
+            {% endif %}
+            {% if is_granted('delete', post) %}
+               <a href="{{ path('micro_post_delete', {'id': post.id }) }}" class="badge badge-pill badge-info">Remove post : {{ post.id }}</a>
+            {% endif %}
         </p>
     {% endfor %}
+    </div>
 {% endblock %}
+
+{# is_granted() is use to restrict display of certains fonctionnality #}

@@ -2,11 +2,6 @@
 
 {% block body %}
     <div class="container">
-    {% if error %}
-        <div class="alert alert-danger">
-            {{ error.messageKey|trans(error.messageData, 'security') }}
-        </div>
-    {% endif %}
 
     <form action="{{ path('security_login') }}" method="post">
         <div>
@@ -19,6 +14,13 @@
                 <label class="form-control-label required" for="password">Password</label>
                 <input type="password" id="password" name="_password" required="required" class="form-control">
             </div>
+
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
             <div class="form-group">
                 <button type="submit" id="Login" name="Login" class="btn-secondary btn">Login</button>
             </div>
@@ -26,5 +28,6 @@
             <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}">
         </div>
     </form>
+
     </div>
 {% endblock %}
