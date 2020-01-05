@@ -1,14 +1,16 @@
 
 {% block body %}
-
     <div class="media text-muted pt-3">
         <img data-src="holder.js/32x32?text=AK&bg=e83e8c&fg=fff&size=8" alt="holder {{ post.id }}" class="mr-2 rounded">
         <p class="media-body pb-3 mb-0">
             {% if post.user.username is defined %}
-                <span class="d-block"><strong class="text-gray-dark">@{{ post.user.username }}</strong> <small>{{post.time | date('d/m/Y H:i:s')}}</small></span>
+                <span class="d-block">
+                    <a href="{{ path('micro_post_user',{'username' : post.user.username }) }}">
+                        <strong class="text-gray-dark">@{{ post.user.username }}</strong>
+                    </a>
+                    <small>{{post.time | date('d/m/Y H:i:s')}}</small></span>
             {% endif %}
-            {{post.text}}
+            <a href="{{ path('micro_post_fetch', {'id' : post.id}) }}">{{post.text}}</a>
         </p>
     </div>
-
 {% endblock %}

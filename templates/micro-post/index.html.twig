@@ -11,9 +11,7 @@
     <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
 
     {% for post in posts %}
-        <a href="{{ path('micro_post_fetch', {'id' : post.id}) }}">
-          {{  include('micro-post/post.html.twig', {'post' : post })  }}
-        </a>
+        {{  include('micro-post/post.html.twig', {'post' : post })  }}
         <p class="d-block text-right">
             {% if is_granted('edit', post) %}
                <a href="{{ path('micro_post_edit', {'id': post.id }) }}" class="badge badge-pill badge-light">Edit post : {{ post.id }}</a>

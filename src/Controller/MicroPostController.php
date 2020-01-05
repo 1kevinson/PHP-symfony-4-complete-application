@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\MicroPost;
+use App\Entity\User;
 use App\Forms\MicroPostType;
 use App\Repository\MicroPostRepository;
 use DateTime;
@@ -116,7 +117,6 @@ class MicroPostController extends AbstractController
     {
         $authUser = $this->getUser();
         $microPost = new MicroPost();
-        $microPost->setTime( new DateTime());
         $microPost->setUser($authUser);
 
         $form = $this->formFactory->create(MicroPostType::class, $microPost );
@@ -133,6 +133,17 @@ class MicroPostController extends AbstractController
         return $this->render('micro-post/add.html.twig',[
             'form' => $form->createView()
         ]);
+    }
+
+
+    /**
+     * @Route("/user/{username}", name="micro_post_user")
+     */
+    public function userPosts(User $userWithPosts)
+    {
+        return $this->render('micro-post/index.html.twig',[
+                'posts' => $userWithPosts->getPosts()
+            ]);
     }
 
 

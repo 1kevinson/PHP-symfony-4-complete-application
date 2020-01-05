@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MicroPostRepository")
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table()
  */
 class MicroPost
@@ -30,12 +31,13 @@ class MicroPost
      */
     private $time;
 
-    /* Jointure ManyToOne - Cardinalité multiple qui a le inversedBy (nom de la propriété dans l'entité jointe)  */
+    /* Jointure ManyToOne - Cardinalité multiple qui a le inversedBy (nom de la propriété dans l'entité jointe) ; c'est lui qui detient la clé étrangère */
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
 
     /**
      * @return mixed
@@ -86,6 +88,13 @@ class MicroPost
     }
 
     /**
+     * @ORM\PrePersist()
+     */
+    public function setTimeOnPersist(): void {
+        $this->time = new \DateTime();
+    }
+
+    /**
      * @return mixed
      */
     public function getUser()
@@ -110,6 +119,7 @@ class MicroPost
         - Don't forget to use annotation @ORM\Table which is necessary to create table with command doctrine:migration
         - Don't forget name space for validators constraints
         - @Assert\Length(min=10,minMessage="Custom error message")
+        - before using a lifecycle callbacks we have to
     */
 }
 
