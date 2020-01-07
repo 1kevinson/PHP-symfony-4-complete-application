@@ -58,15 +58,22 @@ class MicroPostController extends AbstractController
     public function index(TokenStorageInterface $tokenStorage)
     {
         $currentUser = $tokenStorage->getToken()->getUser();
+        $allPosts  = $this->microPostRepository->findAll();
 
-        if($currentUser instanceof User){
-           $posts = $this->microPostRepository->findAllByUsers($currentUser->getFollowing());
+        if($tokenStorage->getToken()->getRoleNames() == [User::ROLE_USER]){
+            if($currentUser instanceof User){
+               $posts = $this->microPostRepository->findAllByUsers($currentUser->getFollowing());
+            }
+
+            return $this->render('micro-post/index.html.twig',[
+                    'posts' => $posts
+                 ]
+            );
         }
 
         return $this->render('micro-post/index.html.twig',[
-                'posts' => $posts
-             ]
-        );
+            'posts' => $allPosts
+        ]);
     }
 
     /**
