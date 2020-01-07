@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\MicroPost;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -19,9 +20,34 @@ class MicroPostRepository extends ServiceEntityRepository
         parent::__construct($registry, MicroPost::class);
     }
 
-    // /**
-    //  * @return MicroPost[] Returns an array of MicroPost objects
-    //  */
+
+    public function findAllByUsers(Collection $users)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $query = $qb->select('p')
+            ->where('p.user IN (:following) ')
+            ->setParameter('following', $users)
+            ->orderBy('p.time', 'DESC')
+            ->getQuery();
+
+        return $query->getResult();
+
+    }
+
+
+    /*
+     * On utilise Collection car la liste des following est un ArrayCollection
+     *
+     * $qb = $this->createQueryBuilder('p');  --- cree l'alias 'p'
+     * $qb->select('p') --- SELECT * FROM MicroPost p
+     * where('p.user') ---- WHERE micropost.user    (l'entité micropost)
+     * ->getQuery();  ---- va creer une requete ('select from **** )
+     * */
+
+
+
+
+
     /*
     public function findByExampleField($value)
     {

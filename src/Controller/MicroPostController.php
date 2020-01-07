@@ -8,7 +8,6 @@ use App\Entity\MicroPost;
 use App\Entity\User;
 use App\Forms\MicroPostType;
 use App\Repository\MicroPostRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +15,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface ;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -52,14 +52,20 @@ class MicroPostController extends AbstractController
 
     /**
      * @Route("/",name="micro_post_index")
+     * @param TokenStorageInterface $tokenStorage
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index()
+    public function index(TokenStorageInterface $tokenStorage)
     {
+        $currentUser = $tokenStorage->getToken()->getUser();
+
+        if($currentUser instanceof User){
+           $posts = $this->microPostRepository->findAllByUsers($currentUser->getFollowing());
+        }
+
         return $this->render('micro-post/index.html.twig',[
-                'posts' => $this->microPostRepository->findBy([],[
-                        'id' => 'DESC'
-                    ]
-                )]
+                'posts' => $posts
+             ]
         );
     }
 
