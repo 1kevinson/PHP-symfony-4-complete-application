@@ -49,4 +49,5 @@ security:
 
     # Define the role hierarchy setting to display datas allowed for ROLE_USER to ROLE_ADMIN
     role_hierarchy:
+        ROLE_USER: ROLE_USER
         ROLE_ADMIN: ROLE_USER

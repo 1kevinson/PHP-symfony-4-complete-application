@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -203,7 +204,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
     public function getFollowers()
     {
@@ -211,7 +212,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
     public function getFollowing()
     {
@@ -219,14 +220,13 @@ class User implements UserInterface, \Serializable
     }
 
 
-
-
-
-    /* Comment section
-
+    /*
+     *  Comment section
        - to use User in security.yaml we have to implements the UserInterface class end implements the methods below
        - serialize is useful to pass user entity inside the session and in the next request; and the id will be use to fetch this user Entity from the database
-   */
+       - use return annotation @Return Collection when the proprity in constructor is ArrayCollection
+    *
+    */
 
     public function getRoles()
     {

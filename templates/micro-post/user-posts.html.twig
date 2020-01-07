@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+
+        <div class="card-group py-2">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title" style="font-weight: bolder">
+                        {{ user.fullname }}
+                            <small class="text-muted">~ @{{ user.username }}</small>
+                    </h4>
+
+                    {# Fonctionality available for authenticated User (app.user) #}
+                    {% if is_granted('ROLE_USER') %}
+                        {% if user != app.user %}
+                            {% if user.followers.contains(app.user) == false %}
+                                <a href="{{ path('following_follow',{'id': user.id}) }}" class="btn btn-outline-primary">Follow</a>
+                            {% else %}
+                                <a href="{{ path('following_unfollow',{'id': user.id}) }}" class="btn btn-outline-danger">Unfollow</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card-group py-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Followers</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for follower in user.followers %}
+                        <li class="list-group-item">
+                            <a href="{{ path('micro_post_user',{'username' : follower.username}) }}">
+                                @{{ follower.username }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5>Following</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for following in user.following %}
+                        <li class="list-group-item">
+                            <a href="{{ path('micro_post_user',{'username' : following.username}) }}">
+                                @{{ following.username }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        {% for post in posts %}
+            {{  include('micro-post/post.html.twig', {'post' : post })  }}
+            <p class="d-block text-right">
+                {% if is_granted('edit', post) %}
+                    <a href="{{ path('micro_post_edit', {'id': post.id }) }}" class="badge badge-pill badge-light">Edit post : {{ post.id }}</a>
+                {% endif %}
+                {% if is_granted('delete', post) %}
+                    <a href="{{ path('micro_post_delete', {'id': post.id }) }}" class="badge badge-pill badge-info">Remove post : {{ post.id }}</a>
+                {% endif %}
+            </p>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{#
+
+    - is_granted() is use to restrict display of certains fonctionnality
+    - app.user is symfony magical method that retrieve currently authenticated user
+
+#}
