@@ -8,19 +8,36 @@
         </div>
     {% endfor %}
 
-    <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
+    {% if usersToFollow|length > 0 %}
+        <p> You currently do not follow anyone, you might find these users interesting </p>
+        <hr>
 
-    {% for post in posts %}
-        {{  include('micro-post/post.html.twig', {'post' : post })  }}
-        <p class="d-block text-right">
-            {% if is_granted('edit', post) %}
-               <a href="{{ path('micro_post_edit', {'id': post.id }) }}" class="badge badge-pill badge-light">Edit post : {{ post.id }}</a>
-            {% endif %}
-            {% if is_granted('delete', post) %}
-               <a href="{{ path('micro_post_delete', {'id': post.id }) }}" class="badge badge-pill badge-info">Remove post : {{ post.id }}</a>
-            {% endif %}
-        </p>
-    {% endfor %}
+        <div class="dropdown show">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Users to Follow
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            {% for userToFollow in usersToFollow %}
+                <a class="dropdown-item" href="{{ path('following_follow', {'id': userToFollow.id} ) }}">{{userToFollow.fullname}}</a>
+            {% endfor %}
+            </div>
+        </div>
+
+        {% else %}
+            <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
+
+        {% for post in posts %}
+            {{  include('micro-post/post.html.twig', {'post' : post })  }}
+            <p class="d-block text-right">
+                {% if is_granted('edit', post) %}
+                   <a href="{{ path('micro_post_edit', {'id': post.id }) }}" class="badge badge-pill badge-light">Edit post : {{ post.id }}</a>
+                {% endif %}
+                {% if is_granted('delete', post) %}
+                   <a href="{{ path('micro_post_delete', {'id': post.id }) }}" class="badge badge-pill badge-info">Remove post : {{ post.id }}</a>
+                {% endif %}
+            </p>
+        {% endfor %}
+    {% endif %}
     </div>
 {% endblock %}
 

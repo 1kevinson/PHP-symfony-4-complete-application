@@ -23,6 +23,13 @@
             </div>
         </div>
 
+        {# WARNING ! try to follow user already following #}
+        {% for message in app.flashes('exception') %}
+            <div class="alert alert-warning mt-1">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         <div class="card-group py-2">
             <div class="card">
                 <div class="card-body">

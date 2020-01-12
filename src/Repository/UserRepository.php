@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder as QueryBuilderAlias;
+
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +20,34 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function findAllWithMoreThan5Posts()
+    {
+       return $this->getAllWithMoreThan5PostsQuery()
+                  ->getQuery()
+                  ->getResult();
+    }
+
+    public function findAllWithMoreThan5PostsExceptUser(User $user)
+    {
+        return $this->getAllWithMoreThan5PostsQuery()
+             ->andHaving('u != :user')
+             ->setParameter('user', $user)
+             ->getQuery()
+             ->getResult();
+    }
+
+    public function getAllWithMoreThan5PostsQuery() : QueryBuilderAlias
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        return $qb->select('u')
+            ->innerJoin('u.posts','mp')
+            ->groupBy('u')
+            ->having('count(mp) > 5');
+    }
+
+
 
     // /**
     //  * @return User[] Returns an array of User objects
@@ -47,4 +77,5 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
+
 }

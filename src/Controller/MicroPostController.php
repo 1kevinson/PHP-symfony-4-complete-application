@@ -8,7 +8,9 @@ use App\Entity\MicroPost;
 use App\Entity\User;
 use App\Forms\MicroPostType;
 use App\Repository\MicroPostRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -26,13 +28,9 @@ class MicroPostController extends AbstractController
 
 
     private $microPostRepository;
-
     private $formFactory;
-
     private $entityManager;
-
     private $flashBag;
-
     private $authorizationChecker;
 
 
@@ -52,21 +50,22 @@ class MicroPostController extends AbstractController
 
     /**
      * @Route("/",name="micro_post_index")
-     * @param TokenStorageInterface $tokenStorage
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(TokenStorageInterface $tokenStorage)
+    public function index(TokenStorageInterface $tokenStorage, UserRepository $userRepository)
     {
         $currentUser = $tokenStorage->getToken()->getUser();
         $allPosts  = $this->microPostRepository->findAll();
+        $userToFollow = [];
 
         if($tokenStorage->getToken()->getRoleNames() == [User::ROLE_USER]){
             if($currentUser instanceof User){
                $posts = $this->microPostRepository->findAllByUsers($currentUser->getFollowing());
+               $userToFollow = count($posts) !== 0 ? [] : $userRepository->findAllWithMoreThan5PostsExceptUser($currentUser);
             }
 
             return $this->render('micro-post/index.html.twig',[
-                    'posts' => $posts
+                    'posts' => $posts,
+                    'usersToFollow' => $userToFollow
                  ]
             );
         }
