@@ -77,6 +77,7 @@ class User implements UserInterface, \Serializable
      */
     private $followers;
 
+    /* ManyToMany est utilisé sur l'entité concernée par la relation */
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="followers")
      * @ORM\JoinTable(name="following",
@@ -90,12 +91,18 @@ class User implements UserInterface, \Serializable
      */
     private $following;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\MicroPost", inversedBy="likedBy")
+     */
+    private $postsLiked;
+
     /* CONSTRUCTOR SECTION */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->followers = new ArrayCollection();
         $this->following = new ArrayCollection();
+        $this->postsLiked = new ArrayCollection();
     }
 
     /**
@@ -218,6 +225,15 @@ class User implements UserInterface, \Serializable
     {
         return $this->following;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getPostsLiked()
+    {
+        return $this->postsLiked;
+    }
+
 
 
     /*

@@ -25,8 +25,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class MicroPostController extends AbstractController
 {
-
-
     private $microPostRepository;
     private $formFactory;
     private $entityManager;
