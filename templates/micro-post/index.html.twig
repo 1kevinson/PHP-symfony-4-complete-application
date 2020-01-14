@@ -8,7 +8,7 @@
         </div>
     {% endfor %}
 
-    {% if usersToFollow|length > 0 %}
+    {% if usersToFollow is defined  and usersToFollow|length > 0 %}
         <p> You currently do not follow anyone, you might find these users interesting </p>
         <hr>
 

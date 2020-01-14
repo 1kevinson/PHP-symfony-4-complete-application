@@ -1,0 +1,4 @@
+-- Recharger la table manquante avant de faire un chargement de fixtures
+
+php bin/console doctrine:migrations:execute --up 20200114042747
+

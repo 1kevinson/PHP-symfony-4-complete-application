@@ -40,6 +40,13 @@ class AppFixtures extends Fixture
             'password' => 'admin123',
             'fullName' => 'Sudo User',
             'roles'     => [User::ROLE_ADMIN]
+        ],
+        [
+            'username' => '1kevinson',
+            'email' => '1kevinson@admin.com',
+            'password' => 'admin',
+            'fullName' => 'Arsene Kevin',
+            'roles'     => [User::ROLE_ADMIN]
         ]
     ];
 
