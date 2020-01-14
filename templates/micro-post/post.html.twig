@@ -1,16 +1,22 @@
+{% extends "base.html.twig" %}
 
 {% block body %}
-    <div class="media text-muted pt-3">
-        <img data-src="holder.js/32x32?text=AK&bg=e83e8c&fg=fff&size=8" alt="holder {{ post.id }}" class="mr-2 rounded">
-        <p class="media-body pb-3 mb-0">
-            {% if post.user.username is defined %}
-                <span class="d-block">
-                    <a href="{{ path('micro_post_user',{'username' : post.user.username }) }}">
-                        <strong class="text-gray-dark">@{{ post.user.username }}</strong>
-                    </a>
-                    <small>{{post.time | date('d/m/Y H:i:s')}}</small></span>
-            {% endif %}
-            <a href="{{ path('micro_post_fetch', {'id' : post.id}) }}">{{post.text}}</a>
-        </p>
+    {{  include('micro-post/raw-post.html.twig', {'post' : post })  }}
+
+    {% set isLiked = post.likedBy.contains(app.user) %}
+
+    <div class="pt-2">
+        <button style="display: {% if not isLiked %} block {% else %} none {% endif %} " class="btn btn-outline-secondary btn-sm" id="like">
+            Like
+            <span class="badge badge-light" id="likes-like">{{ post.likedBy.count }}</span>
+        </button>
+        <button style="display: {% if isLiked %} block {% else %} none {% endif %} " class="btn btn-outline-secondary btn-sm" id="unlike">
+            Unlike
+            <span class="badge badge-light" id="likes-unlike">{{ post.likedBy.count }}</span>
+        </button>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+
+{% endfor %}
