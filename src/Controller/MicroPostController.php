@@ -86,6 +86,7 @@ class MicroPostController extends AbstractController
             throw new UnauthorizedHttpException();
         }*/
 
+        //Recuperation du post et affichage des valeurs via le widget twig
         $form = $this->formFactory->create(MicroPostType::class, $post );
         $form->handleRequest($request);
 
@@ -93,7 +94,9 @@ class MicroPostController extends AbstractController
         {
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('micro_post_index');
+            return $this->redirectToRoute('micro_post_user',[
+                'username' => $this->getUser()->getUsername()
+            ]);
         }
 
         return $this->render('micro-post/add.html.twig',[
@@ -136,7 +139,9 @@ class MicroPostController extends AbstractController
             $this->entityManager->persist($microPost);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('micro_post_index');
+            return $this->redirectToRoute('micro_post_user',[
+                'username' => $this->getUser()->getUsername()
+            ]);
         }
 
         return $this->render('micro-post/add.html.twig',[

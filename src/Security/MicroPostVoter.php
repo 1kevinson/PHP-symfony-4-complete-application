@@ -57,7 +57,7 @@ class MicroPostVoter extends Voter
             return true;
         }
 
-        //Recuperer l'utilisateur courant
+        //Recuperer l'utilisateur courant User (UserInterface)
         $authenticatedUser = $token->getUser();
 
         if(!$authenticatedUser instanceof User)
