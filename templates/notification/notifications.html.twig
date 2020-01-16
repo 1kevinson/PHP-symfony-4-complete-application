@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{%  block body %}
+    <div class="card">
+        <div class="card-body">
+            <h4>Unread Notifications</h4>
+        </div>
+
+        <ul class="list-group list-group-flush">
+            {% for notification in notifications %}
+                <li class="list-group-item">
+                    {% if notification is like %} {# Twig reconnait le type discr dans la table crée par le discriminatorMAP et grace à la function dans le AppExtension #}
+                        <a href="{{ path('micro_post_user', {'username' : notification.likedBy.username}) }}"> {{ notification.likedBy.username }} </a>
+                        likes your <a href="{{ path('micro_post_fetch', {'id' : notification.microPost.id }) }}"> Post </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{%  endblock %}

@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {#  A NE PAS OUBLIER !!! #}
     {{ parent() }}
 
      <script>
@@ -26,7 +27,7 @@
 
          addOnClick(likeButton,unlikeButton,document.getElementById('likes-unlike'),'{{ path('likes_like',{'id' : post.id }) }}');
          addOnClick(unlikeButton,likeButton,document.getElementById('likes-like'),'{{ path('likes_unlike',{'id' : post.id }) }}');
-         
+
 
          /* LOGIC REGION */
          function switchButton(button, oppositeButton) {

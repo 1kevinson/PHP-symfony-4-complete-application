@@ -27,7 +27,8 @@ Encore
     ])
     .addStyleEntry('css/app', [
         './node_modules/bootstrap/dist/css/bootstrap.min.css',
-        './assets/app.css'
+        './assets/css/app.css',
+        './assets/css/fontawesome.min.css'
     ])
     //.addEntry('page2', './assets/js/page2.js')
 

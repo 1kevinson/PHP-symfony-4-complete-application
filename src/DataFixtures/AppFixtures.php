@@ -8,7 +8,6 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Validator\Constraints\Date;
 
 class AppFixtures extends Fixture
 {
