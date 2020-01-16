@@ -71,7 +71,7 @@
                     response.json().then(function (json) {
                         console.log(json.count);
                         document.getElementById('notification-count').innerText = json.count;
-                        setTimeout(fetchNotificationCount,5000);
+                        setTimeout(fetchNotificationCount,4000);
                     });
                 }).catch(function (reason) {
 
