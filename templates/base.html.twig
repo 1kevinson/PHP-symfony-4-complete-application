@@ -43,6 +43,10 @@
             {% else %}
                 <li class="nav-item text-nowrap">
                     <a class="nav-link"
+                       href="{{ path('user_register') }}">Register</a>
+                </li>
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link"
                        href="{{ path('security_login') }}">Sign in</a>
                 </li>
             {% endif %}
@@ -69,7 +73,6 @@
                     {'credentials' : 'include'}
                 ).then(function (response) {
                     response.json().then(function (json) {
-                        console.log(json.count);
                         document.getElementById('notification-count').innerText = json.count;
                         setTimeout(fetchNotificationCount,4000);
                     });
