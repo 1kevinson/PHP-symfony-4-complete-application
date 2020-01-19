@@ -5,9 +5,13 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use App\Event\UserRegisterEvent;
 use App\Forms\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -20,8 +24,12 @@ class RegistrerController extends AbstractController
 
     /**
      * @Route("/register", name="user_register")
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param Request $request
+     * @param EventDispatcherInterface $eventDispatcher
+     * @return RedirectResponse|Response
      */
-    public function register(UserPasswordEncoderInterface $passwordEncoder, Request $request)
+    public function register(UserPasswordEncoderInterface $passwordEncoder, Request $request, EventDispatcherInterface $eventDispatcher)
     {
         $user = new User();
 
@@ -32,11 +40,15 @@ class RegistrerController extends AbstractController
         {
             $password  = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
-            $user->setRoles([User::ROLE_USER]);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $userRegisterEvent = new UserRegisterEvent($user);
+
+            /* Dispatch Event -> Dont forget to add Event name even if PHPSTORM blur the method field */
+            $eventDispatcher->dispatch($userRegisterEvent,UserRegisterEvent::NAME);
 
             return $this->redirectToRoute('security_login');
         }
@@ -45,4 +57,10 @@ class RegistrerController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /*
+        - Every thing that can be happen to new User persisted in database should be handle by Events,
+        - To dispatch an event we have to use a event name, and the event class
+        - new UserRegisterEvent($user); --> Is created to hold any information that would be required by any subscriber
+    */
 }
