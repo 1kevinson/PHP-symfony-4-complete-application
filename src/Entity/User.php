@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="email", message="This e-mail is already in use")
  * @UniqueEntity(fields="username", message="This username is already in use")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
 
     const ROLE_USER = "ROLE_USER";
@@ -92,9 +92,20 @@ class User implements UserInterface, \Serializable
     private $following;
 
     /**
+     * @ORM\Column(type="string", nullable=true, length=30)
+     */
+    private $confirmationToken;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled;
+
+    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\MicroPost", inversedBy="likedBy")
      */
     private $postsLiked;
+
 
     /* CONSTRUCTOR SECTION */
     public function __construct()
@@ -103,7 +114,7 @@ class User implements UserInterface, \Serializable
         $this->followers = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->postsLiked = new ArrayCollection();
-
+        $this->enabled = false;
         $this->roles = [self::ROLE_USER];
     }
 
@@ -237,6 +248,28 @@ class User implements UserInterface, \Serializable
     }
 
 
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken($confirmationToken): void
+    {
+        $this->confirmationToken = $confirmationToken;
+    }
+
+
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled($enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+
 
     /*
      *  Comment section
@@ -276,13 +309,35 @@ class User implements UserInterface, \Serializable
        return serialize([
           $this->id,
           $this->username,
-          $this->password
+          $this->password,
+          $this->enabled
        ]);
     }
 
    public function unserialize($serialized)
     {
-        list($this->id, $this->username, $this->password) = unserialize($serialized);
+        list($this->id, $this->username, $this->password, $this->enabled) = unserialize($serialized);
     }
 
+
+    /* Methods we retrieve in AdvanceUserInterface */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
 }

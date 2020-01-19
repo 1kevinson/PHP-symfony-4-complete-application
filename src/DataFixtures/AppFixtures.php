@@ -77,7 +77,7 @@ class AppFixtures extends Fixture
 
     public function loadMicroPosts(ObjectManager $manager)
     {
-        for($i=0; $i < 40 ; $i++)
+        for($i=0; $i < 30; $i++)
         {
             $micro_post = new MicroPost();
             $micro_post->setText(
@@ -105,8 +105,9 @@ class AppFixtures extends Fixture
             $user->setEmail($userData['email']);
             $user->setUsername($userData['username']);
             $user->setFullname($userData['fullName']);
-            $user->setRoles($userData['roles']);
             $user->setPassword($this->passwordEncoder->encodePassword($user,$userData['password']));
+            $user->setRoles($userData['roles']);
+            $user->setEnabled(true);
 
             $this->addReference($userData['username'],$user);
 
@@ -114,4 +115,9 @@ class AppFixtures extends Fixture
          }
             $manager->flush();
     }
+
+
+    /*
+        SetReference and addReference are use to link 2 Entities
+    */
 }

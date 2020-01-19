@@ -7,11 +7,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Event\UserRegisterEvent;
 use App\Forms\UserType;
+use App\Security\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -24,12 +23,8 @@ class RegistrerController extends AbstractController
 
     /**
      * @Route("/register", name="user_register")
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @return RedirectResponse|Response
      */
-    public function register(UserPasswordEncoderInterface $passwordEncoder, Request $request, EventDispatcherInterface $eventDispatcher)
+    public function register(UserPasswordEncoderInterface $passwordEncoder, Request $request, EventDispatcherInterface $eventDispatcher, TokenGenerator $tokenGenerator)
     {
         $user = new User();
 
@@ -40,6 +35,7 @@ class RegistrerController extends AbstractController
         {
             $password  = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
+            $user->setConfirmationToken($tokenGenerator->getRandomSecureToken(30));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -47,7 +43,7 @@ class RegistrerController extends AbstractController
 
             $userRegisterEvent = new UserRegisterEvent($user);
 
-            /* Dispatch Event -> Dont forget to add Event name even if PHPSTORM blur the method field */
+            /* Dispatch Event -> Dont forget to add Event name even if PHPSTORM blur the method parameter field */
             $eventDispatcher->dispatch($userRegisterEvent,UserRegisterEvent::NAME);
 
             return $this->redirectToRoute('security_login');

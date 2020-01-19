@@ -3,9 +3,13 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+
+# Permet de creer des variables globales
+
 parameters:
     locale: 'en'
-    hello_m : "Hello from service -> "
+    hello_m : "Hello from service"
+    email_from: '%env(MAILER_FROM)%'
 
 services:
     # default configuration for services in *this* file
@@ -34,9 +38,9 @@ services:
         arguments:
             $locale: '%locale%'
 
-    #    App\Service\Greeting:
-    #        arguments:
-    #            $message: '%hello_m%'
+    App\Mailer\Mailer:
+        arguments:
+            $mailFrom: '%email_from%'
 
     app.greeting:
         public:  true
