@@ -56,6 +56,21 @@ services:
             - !service { class: PDO, factory: 'database_connection:getWrappedConnection' }
             - { lock_mode: 1 }
 
+    App\Event\UserSubscriber:
+        arguments:
+            $defaultLocale: '%kernel.default_locale%'
+
+    App\Event\LocaleSubscriber:
+        arguments:
+            - ['%kernel.default_locale%'] #configure inside the translation.yml file
+
+
+
+
+
+
+
+
     # App\Controller\BlogController: ['@App\Service\Greeting']
 
     # App\Service\Greeting: ['@monolog.logger']

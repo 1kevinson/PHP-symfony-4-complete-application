@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\MicroPost;
 use App\Entity\User;
+use App\Entity\UserPreferences;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -61,6 +62,11 @@ class AppFixtures extends Fixture
         'How was your day?'
     ];
 
+    private const LANGAGES = [
+      'fr',
+      'en'
+    ];
+
     private $passwordEncoder;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
@@ -77,7 +83,7 @@ class AppFixtures extends Fixture
 
     public function loadMicroPosts(ObjectManager $manager)
     {
-        for($i=0; $i < 300; $i++)
+        for($i=0; $i < 150; $i++)
         {
             $micro_post = new MicroPost();
             $micro_post->setText(
@@ -111,6 +117,10 @@ class AppFixtures extends Fixture
 
             $this->addReference($userData['username'],$user);
 
+            $preference = new UserPreferences();
+            $preference->setLocale(self::LANGAGES[rand(0,1)]);
+
+            $user->setPreferences($preference);
             $manager->persist($user);
          }
             $manager->flush();
@@ -118,6 +128,9 @@ class AppFixtures extends Fixture
 
 
     /*
-        SetReference and addReference are use to link 2 Entities
+     * We have to set micropost fixture first because we would like to retrieve his reference first
+     *
+        addReference and getReference and  are use to link 2 Entities *
+        fix reference to username with [addReference] and  associate micropost randomly with [getReference]
     */
 }

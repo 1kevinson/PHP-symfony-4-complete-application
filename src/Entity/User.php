@@ -106,6 +106,11 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $postsLiked;
 
+    /* Use cascade persist to persist an entity (preferences) async to user  */
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\UserPreferences", cascade={"persist"})
+     */
+    private $preferences;
 
     /* CONSTRUCTOR SECTION */
     public function __construct()
@@ -318,6 +323,23 @@ class User implements AdvancedUserInterface, \Serializable
     {
         list($this->id, $this->username, $this->password, $this->enabled) = unserialize($serialized);
     }
+
+    /**
+     * @return UserPreferences|null
+     */
+    public function getPreferences()
+    {
+        return $this->preferences;
+    }
+
+    /**
+     * @param mixed $preferences
+     */
+    public function setPreferences($preferences): void
+    {
+        $this->preferences = $preferences;
+    }
+
 
 
     /* Methods we retrieve in AdvanceUserInterface */
