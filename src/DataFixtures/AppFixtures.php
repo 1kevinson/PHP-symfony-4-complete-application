@@ -77,7 +77,7 @@ class AppFixtures extends Fixture
 
     public function loadMicroPosts(ObjectManager $manager)
     {
-        for($i=0; $i < 30; $i++)
+        for($i=0; $i < 300; $i++)
         {
             $micro_post = new MicroPost();
             $micro_post->setText(

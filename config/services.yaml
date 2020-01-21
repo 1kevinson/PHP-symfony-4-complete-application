@@ -50,6 +50,12 @@ services:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
 
+    #Define the service to use PDO Session Storage in database
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            - !service { class: PDO, factory: 'database_connection:getWrappedConnection' }
+            - { lock_mode: 1 }
+
     # App\Controller\BlogController: ['@App\Service\Greeting']
 
     # App\Service\Greeting: ['@monolog.logger']

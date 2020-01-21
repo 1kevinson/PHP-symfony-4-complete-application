@@ -7,6 +7,8 @@ doctrine:
 
        #with symfony 3.3, remove the 'resolve': prefix
         url: '%env(resolve:DATABASE_URL)%'
+       #Avoid migration command to find session or user_micro_post table in database
+        schema_filter: ~^(?!sessions|user_micro_post)~
 
 
         # IMPORTANT: You MUST configure your server version,

@@ -18,6 +18,10 @@
                 <source>Add new</source>
                 <target>Ajouter une nouvelle</target>
             </trans-unit>
+            <trans-unit id="post.save">
+                <source>Save</source>
+                <target>Enregistrer</target>
+            </trans-unit>
             <trans-unit id="post.recent">
                 <source>Recent updates</source>
                 <target>Mises à jour récentes</target>
