@@ -215,3 +215,54 @@ sudo chown -h www-data:www-data /var/www/micropost/
 
 tail the log :
 tail var/log/prod.log
+
+
+
+----- Configure phpmyadmin VPS
+create file :
+/etc/apache2/conf-enabled/phpmyadmin.conf
+
+add this configuration :
+Alias /phpmyadmin /usr/share/phpmyadmin
+
+<Directory /usr/share/phpMyAdmin/>
+ AddDefaultCharset UTF-8
+ <IfModule mod_authz_core.c>
+ # Apache 2.4
+ <RequireAny>
+ #Require ip 127.0.0.1
+ #Require ip ::1
+  Require all granted
+ </RequireAny>
+ </IfModule>
+ <IfModule !mod_authz_core.c>
+ # Apache 2.4
+  Allow from 77.207.29.214
+ </IfModule>
+</Directory>
+
+<Directory /usr/share/phpMyAdmin/setup/>
+ <IfModule mod_authz_core.c>
+  # Apache 2.4
+  <RequireAny>
+   #Require ip 127.0.0.1
+   #Require ip ::1
+   Require all granted
+  </RequireAny>
+ </IfModule>
+ <IfModule !mod_authz_core.c>
+ # Apache 2.4
+   Allow from 77.207.29.214
+ </IfModule>
+</Directory>
+
+reload service apache after that:
+sudo service apache2 restart
+
+
+
+Erreur d'affichage warning sql.lib.php du VPS :
+Rends toi dans le fichier /usr/share/phpmyadmin/libraries/sql.lib.php à l'aide de cette commande : nano /usr/share/phpmyadmin/libraries/sql.lib.php
+Recherche (count($analyzed_sql_results['select_expr'] == 1) à l'aide des touches CTRL + W
+Remplace le par ((count($analyzed_sql_results['select_expr']) == 1)
+-------
