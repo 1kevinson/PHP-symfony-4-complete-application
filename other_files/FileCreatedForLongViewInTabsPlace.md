@@ -39,7 +39,7 @@ App\Mailer\Mailer:
 2' php bin/console doctrine:database:create
 3' php bin/console doctrine:migration:status
 4' php bin/console doctrine:migration:migrate -n       ou       php bin/console doctrine:schema:update --force
-
+5' php bin/console doctrine:fixtures:load -n
 
 #-Composer
 Public keys stored in /Users/mac/.composer
@@ -266,3 +266,7 @@ Rends toi dans le fichier /usr/share/phpmyadmin/libraries/sql.lib.php à l'aide 
 Recherche (count($analyzed_sql_results['select_expr'] == 1) à l'aide des touches CTRL + W
 Remplace le par ((count($analyzed_sql_results['select_expr']) == 1)
 -------
+
+
+MAILER URL - SMTP
+MAILER_URL=smtp://smtp.mailtrap.io:2525?encryption=tls&auth_mode=login&username=0e107e69d52be3&password=eab5687e2bd497
