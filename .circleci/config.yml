@@ -9,9 +9,9 @@ jobs:
           DATABASE_URL: mysql://admin:admin@127.0.0.1:3306/micro-post
           MAILER_FROM: micro@micro.com
           MAILER_URL: null://localhost
-      - image: circleci/mysql:5.2
+      - image: circleci/mysql
         environment:
-          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: micro-post
     steps:
       - checkout
